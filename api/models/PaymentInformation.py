@@ -11,4 +11,4 @@ class PaymentInformation(Base):
     payment_type = Column(String(30), nullable=False)
 
     #sandwich = relationship("Sandwich", back_populates="order_details")
-    order = relationship("Payment_Information", back_populates="payment_id")
+    payment = relationship("Payment_Information", back_populates="payment_id")
