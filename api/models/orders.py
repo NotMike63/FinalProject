@@ -8,7 +8,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     order_id = Column(Integer, ForeignKey("order_details.order_id"), primary_key=True, autoincrement=True)
-    tracking_number = Column(Integer, unique=True, primary_key=True, autoincrement=True)
+    tracking_number = Column(Integer, unique=True)
     order_status = Column(BOOLEAN, nullable=False, default=False)
     order_date = Column(DateTime, nullable=False, server_default=str(datetime.now()))
     total_price = Column(Float, nullable=False, default=0.00)
