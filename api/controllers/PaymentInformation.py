@@ -6,9 +6,9 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def create(db: Session, request):
     new_item = model.PaymentInformation(
-        card_info=request.customer_name,
-        transaction_status=request.description,
-        payment_type=request.payment_type
+        card_info=request.card_info,
+        transaction_status=request.transaction_status,
+        payment_type=request.payment_type,
     )
 
     try:
@@ -36,9 +36,8 @@ def read_one(db: Session, card_info):
         item = db.query(model.PaymentInformation).filter(model.PaymentInformation.card_info == card_info).first()
         if not item:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
-    except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    except SQLAlchemyError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="The table is empty.")
     return item
 
 # Update all elements in an item in the table.
