@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def create(db: Session, request):
     new_item = model.OrderDetail(
-        order_id=request.order_id,
+        tracking_number=request.tracking_number,
         amount=request.amount
     )
 

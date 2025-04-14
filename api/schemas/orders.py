@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-from .PaymentInformation import OrderDetail
+from .order_details import OrderDetail
 
 
 
@@ -11,13 +11,10 @@ class OrderBase(BaseModel):
     order_date: datetime
     total_price: float
     customer: str
-    # order_details -- relationship
-    # description: Optional[str] = None
-
 
 class OrderCreate(OrderBase):
-    pass
-
+    tracking_number: int
+    order_status: bool
 
 class OrderUpdate(BaseModel):
     customer_name: Optional[str] = None

@@ -7,7 +7,7 @@ class OrderDetail(Base):
     __tablename__ = "order_details"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    order_id = Column(Integer, ForeignKey("orders.id"))
+    order_id = Column(Integer, ForeignKey("orders.tracking_number"))
     amount = Column(Integer, index=True, nullable=False)
 
     order = relationship("Order", back_populates="order_details")
