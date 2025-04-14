@@ -8,3 +8,4 @@ def index():
     order_details.Base.metadata.create_all(engine)
     recipes.Base.metadata.create_all(engine)
     resources.Base.metadata.create_all(engine)
+    PaymentInformation.Base.metadata.create_all(engine)

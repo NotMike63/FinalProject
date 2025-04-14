@@ -3,13 +3,12 @@ from typing import Optional
 from pydantic import BaseModel
 from sqlalchemy import String
 
-from .sandwiches import Sandwich
-
 # Base return
 class PaymentInformation(BaseModel):
     card_info: str
     transaction_status: bool
     payment_type: str
+    payment_id: int
 
 class PaymentRequest(BaseModel):
     card_information: str
