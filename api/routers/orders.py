@@ -9,28 +9,27 @@ router = APIRouter(
     prefix="/orders"
 )
 
-
+# Create a new Order in the server.
 @router.post("/", response_model=schema.Order)
-def create(request: schema.OrderCreate, db: Session = Depends(get_db)):
+def create(request: schema.OrderBase, db: Session = Depends(get_db)):
     return controller.create(db=db, request=request)
 
+# Get a specific order from server.
+@router.get("/{tracking_number}", response_model=schema.Order)
+def read_one(db: Session = Depends(get_db)):
+    return controller.read_all(db)
 
+# Get all orders from the server.
 @router.get("/", response_model=list[schema.Order])
 def read_all(db: Session = Depends(get_db)):
     return controller.read_all(db)
 
-
-@router.get("/{tracking_number}", response_model=schema.Order)
-@router.get("/{tracking_number}", response_model=schema.Order)
-def read_one(item_id: int, db: Session = Depends(get_db)):
-    return controller.read_one(db, item_id=item_id)
-
-
+# Edits an item in the server.
 @router.put("/{tracking_number}", response_model=schema.Order)
 def update(item_id: int, request: schema.OrderUpdate, db: Session = Depends(get_db)):
     return controller.update(db=db, request=request, item_id=item_id)
 
-
+# Deletes a specific order based on tracking number.
 @router.delete("/{tracking_number}")
 def delete(item_id: int, db: Session = Depends(get_db)):
     return controller.delete(db=db, item_id=item_id)

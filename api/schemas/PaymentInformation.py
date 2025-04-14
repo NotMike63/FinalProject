@@ -5,16 +5,20 @@ from sqlalchemy import String
 
 from .sandwiches import Sandwich
 
-
+# Base return
 class PaymentInformation(BaseModel):
     card_info: str
     transaction_status: bool
     payment_type: str
 
-class PaymentStatus(BaseModel):
-    card_info: str
-    payment_status: bool
+class PaymentRequest(BaseModel):
+    card_information: str
 
+# Schema for updating PaymentInformation
+class PaymentInformationUpdate(BaseModel):
+    card_information: Optional[str] = None
+    transaction_status: Optional[bool] = None
+    payment_type: Optional[str] = None
 
 # class OrderDetailCreate(OrderDetailBase):
 #     order_id: int
