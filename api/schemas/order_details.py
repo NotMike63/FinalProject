@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class OrderDetailBase(BaseModel):
-    amount: int
+    amount: float
 
 
 class OrderDetailCreate(OrderDetailBase):
