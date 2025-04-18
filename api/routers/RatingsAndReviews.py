@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, FastAPI, status, Response
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+
 from ..controllers import RatingsAndReviews as controller
+from ..dependencies.database import get_db
 from ..schemas import RatingsAndReviews as schema
-from ..dependencies.database import engine, get_db
 
 router = APIRouter(
     tags=['RatingsAndReviews'],
@@ -17,7 +18,7 @@ def create(request: schema.RatingsAndReviews, db: Session = Depends(get_db)):
 # Check the status of your Rating and Review.
 @router.get("/{tracking_number}", response_model=schema.RatingsAndReviews)
 def get_status(tracking_number: int, db: Session = Depends(get_db)):
-    return controller.read_one(db, item_id=tracking_number)
+    return controller.read_one(db, tracking_number=tracking_number)
 
 # Get all Ratings and Reviews.
 @router.get("/", response_model=list[schema.RatingsAndReviews])
@@ -27,10 +28,10 @@ def read_all(db: Session = Depends(get_db)):
 # Update a Rating and Review.
 @router.put("/{tracking_number}", response_model=schema.RatingsAndReviewsUpdate)
 def update(tracking_number: int, request: schema.RatingsAndReviews, db: Session = Depends(get_db)):
-    return controller.update(db=db, request=request, item_id=tracking_number)
+    return controller.update(db=db, request=request, tracking_number=tracking_number)
 
 # remove Rating and Review
 @router.delete("/{tracking_number}")
 def delete(tracking_number: int, db: Session = Depends(get_db)):
-    return controller.delete(db=db, item_id=tracking_number)
+    return controller.delete(db=db, tracking_number=tracking_number)
 

@@ -1,7 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME, Float
-from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, Float
+
 from ..dependencies.database import Base
+
 
 class MenuItem(Base):
     __tablename__ = "menu_item"

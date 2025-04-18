@@ -1,7 +1,8 @@
-from sqlalchemy.orm import Session
-from fastapi import HTTPException, status, Response, Depends
-from ..models import PaymentInformation as model
+from fastapi import HTTPException, status, Response
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
+
+from ..models import PaymentInformation as model
 
 
 def create(db: Session, request):

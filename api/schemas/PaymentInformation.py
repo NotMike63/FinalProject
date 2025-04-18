@@ -1,7 +1,9 @@
-from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-from sqlalchemy import String
+from typing import Optional
+
+from pydantic import BaseModel
+
 
 # Base return
 class PaymentInformation(BaseModel):

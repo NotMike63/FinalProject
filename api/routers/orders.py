@@ -16,7 +16,7 @@ def create(request: schema.OrderBase, db: Session = Depends(get_db)):
 
 # Get a specific order from server.
 @router.get("/{tracking_number}", response_model=schema.Order)
-def read_one(db: Session = Depends(get_db)):
+def read_one(tracking_number: int, db: Session = Depends(get_db)):
     return controller.read_all(db)
 
 # Get all orders from the server.

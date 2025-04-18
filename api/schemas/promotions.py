@@ -1,9 +1,7 @@
-from datetime import datetime
-from typing import Optional
 from pydantic import BaseModel
-from sqlalchemy import BOOLEAN, DATETIME, Float
 
 from .orders import Order
+
 
 class PromotionBase(BaseModel):
     tracking_number: int

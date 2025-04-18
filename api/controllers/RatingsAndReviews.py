@@ -1,7 +1,8 @@
-from sqlalchemy.orm import Session
-from fastapi import HTTPException, status, Response, Depends
-from ..models import RatingsAndReviews as model
+from fastapi import HTTPException, status, Response
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
+
+from ..models import RatingsAndReviews as model
 
 
 # This method controls the functionality of creating a new element in the RatingsAndReviews table.

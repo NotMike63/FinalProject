@@ -1,6 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME, BOOLEAN, Float
-from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy import Column, ForeignKey, Integer, String, Float
+
 from ..dependencies.database import Base
 
 
