@@ -8,6 +8,6 @@ class OrderDetail(Base):
 
     tracking_number = Column(Integer)
     order_id = Column(Integer, ForeignKey("orders.order_id"), primary_key=True, index=True)
-    amount = Column(Integer, index=True, nullable=False)
+    amount = Column(Integer, nullable=False)
 
     order = relationship("Order", back_populates="order_details", foreign_keys=[order_id])

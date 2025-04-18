@@ -28,8 +28,8 @@ def read_all(db: Session):
     try:
         result = db.query(model.RatingsAndReviews).all()
     except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+        #error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Table is empty.")
     return result
 
 
@@ -60,7 +60,7 @@ def update(db: Session, tracking_number, request):
 
 
 # This controls the functionality of deleting an element from the RatingsAndReviews table.
-def delete(db: Session, item_id):
+def delete(db: Session, tracking_number):
     try:
         item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.tracking_number == tracking_number)
         if not item.first():
