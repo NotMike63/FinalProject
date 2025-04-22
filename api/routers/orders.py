@@ -31,5 +31,5 @@ def update(tracking_number: int, request: schema.OrderUpdate, db: Session = Depe
 
 # Deletes a specific order based on tracking number.
 @router.delete("/{tracking_number}")
-def delete(item_id: int, db: Session = Depends(get_db)):
-    return controller.delete(db=db, item_id=item_id)
+def delete(tracking_number: int, db: Session = Depends(get_db)):
+    return controller.delete(db=db, tracking_number=tracking_number)

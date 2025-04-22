@@ -44,9 +44,9 @@ def read_one(db: Session, item_id):
     return item
 
 
-def update(db: Session, item_id, request):
+def update(db: Session, tracking_number, request):
     try:
-        item = db.query(model.Order).filter(model.Order.tracking_number == item_id)
+        item = db.query(model.Order).filter(model.Order.tracking_number == tracking_number)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         update_data = request.dict(exclude_unset=True)
@@ -58,9 +58,9 @@ def update(db: Session, item_id, request):
     return item.first()
 
 
-def delete(db: Session, item_id):
+def delete(db: Session, tracking_number):
     try:
-        item = db.query(model.Order).filter(model.Order.order_id == item_id)
+        item = db.query(model.Order).filter(model.Order.tracking_number == tracking_number)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         item.delete(synchronize_session=False)

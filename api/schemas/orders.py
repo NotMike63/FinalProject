@@ -17,14 +17,18 @@ class OrderCreate(OrderBase):
     order_status: bool
 
 class OrderUpdate(BaseModel):
-    customer_name: Optional[str] = None
-    description: Optional[str] = None
+    customer: Optional[str] = None
+    total_price: Optional[float] = None
+    order_status: Optional[bool] = False
+    order_details: Optional[OrderDetail] = None
+
 
 
 class Order(OrderBase):
     order_id: int
     order_date: Optional[datetime] = None
     order_details: list[OrderDetail] = None
+    tracking_number: int
 
     class ConfigDict:
         from_attributes = True
