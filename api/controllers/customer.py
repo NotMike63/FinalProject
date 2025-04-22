@@ -5,7 +5,6 @@ from typing import Type
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from api.models.customer import Customer
 from ..models.customer import Customer
 from ..schemas.customer import CustomerCreate
 

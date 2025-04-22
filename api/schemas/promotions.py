@@ -4,7 +4,6 @@ from .orders import Order
 
 
 class PromotionBase(BaseModel):
-    tracking_number: int
     code: str
     expiration_date: str
 

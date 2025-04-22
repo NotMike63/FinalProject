@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, status, Response, Depends
 from ..models import orders as model
 from sqlalchemy.exc import SQLAlchemyError
+from ..controllers import order_details
 
 
 def create(db: Session, request):
@@ -35,7 +36,7 @@ def read_all(db: Session):
 
 def read_one(db: Session, item_id):
     try:
-        item = db.query(model.Order).filter(model.Order.tracking_number == item_id).first()
+        item = db.query(model.Order).filter(model.Order.order_id == item_id).first()
         if not item:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
     except SQLAlchemyError as e:
@@ -44,9 +45,9 @@ def read_one(db: Session, item_id):
     return item
 
 
-def update(db: Session, tracking_number, request):
+def update(db: Session, order_id, request):
     try:
-        item = db.query(model.Order).filter(model.Order.tracking_number == tracking_number)
+        item = db.query(model.Order).filter(model.Order.order_id == order_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         update_data = request.dict(exclude_unset=True)
@@ -58,9 +59,10 @@ def update(db: Session, tracking_number, request):
     return item.first()
 
 
-def delete(db: Session, tracking_number):
+def delete(db: Session, order_id):
     try:
-        item = db.query(model.Order).filter(model.Order.tracking_number == tracking_number)
+        item = db.query(model.Order).filter(model.Order.order_id == order_id)
+        order_details.delete(db, item)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         item.delete(synchronize_session=False)
