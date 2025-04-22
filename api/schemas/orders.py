@@ -6,14 +6,13 @@ from .order_details import OrderDetail
 
 
 class OrderBase(BaseModel):
-    tracking_number: int
     order_status: bool
     order_date: datetime
     total_price: float
+    order_id: int
     customer: str
 
 class OrderCreate(OrderBase):
-    tracking_number: int
     order_status: bool
 
 class OrderUpdate(BaseModel):
@@ -28,7 +27,6 @@ class Order(OrderBase):
     order_id: int
     order_date: Optional[datetime] = None
     order_details: list[OrderDetail] = None
-    tracking_number: int
 
     class ConfigDict:
         from_attributes = True
