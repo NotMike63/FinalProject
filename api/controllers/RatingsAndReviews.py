@@ -95,10 +95,10 @@ def create_food_review(db: Session, request):
 def get_popular_items(db: Session):
     try:
         result = db.execute("""
-            SELECT menu_item_id, COUNT(*) AS order_count
-            FROM order_items
+            SELECT menu_item_id, COUNT(*) AS review_count
+            FROM RatingsAndReviews
             GROUP BY menu_item_id
-            ORDER BY order_count DESC
+            ORDER BY review_count DESC
             LIMIT 10
         """).fetchall()
     except SQLAlchemyError as e:
