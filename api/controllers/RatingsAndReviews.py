@@ -72,3 +72,36 @@ def delete(db: Session, order_id):
         error = str(e.__dict__['orig'])
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# Creates a review specifically for a food item
+def create_food_review(db: Session, request):
+    from ..models import FoodReviews as model  # Assuming new model
+    new_item = model.FoodReviews(
+        menu_item_id=request.menu_item_id,
+        review_text=request.review_text,
+        review_score=request.review_score
+    )
+    try:
+        db.add(new_item)
+        db.commit()
+        db.refresh(new_item)
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return new_item
+
+# Gets most popular items based on order frequency
+def get_popular_items(db: Session):
+    try:
+        result = db.execute("""
+            SELECT menu_item_id, COUNT(*) AS order_count
+            FROM order_items
+            GROUP BY menu_item_id
+            ORDER BY order_count DESC
+            LIMIT 10
+        """).fetchall()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return result
