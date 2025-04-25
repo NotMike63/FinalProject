@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sqlalchemy
 from fastapi import HTTPException, status, Response, Depends
 from http.client import HTTPException
