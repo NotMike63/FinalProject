@@ -16,8 +16,8 @@ def create(request: schema.OrderBase, db: Session = Depends(get_db)):
 
 # Get a specific order from server.
 @router.get("/{order_id}", response_model=schema.Order)
-def read_one(item_id: int, db: Session = Depends(get_db)):
-    return controller.read_one(db=db, item_id=item_id)
+def read_one(order_id: int, db: Session = Depends(get_db)):
+    return controller.read_one(db=db, order_id=order_id)
 
 # Get all orders from the server.
 @router.get("/", response_model=list[schema.Order])
@@ -25,7 +25,7 @@ def read_all(db: Session = Depends(get_db)):
     return controller.read_all(db)
 
 # Edits an item in the server.
-@router.put("/{order_id}", response_model=schema.Order)
+@router.put("/{order_id}", response_model=schema.OrderUpdate)
 def update(order_id: int, request: schema.OrderUpdate, db: Session = Depends(get_db)):
     return controller.update(db=db, request=request, order_id=order_id)
 

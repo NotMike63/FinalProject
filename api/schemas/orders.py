@@ -14,12 +14,16 @@ class OrderBase(BaseModel):
 
 class OrderCreate(OrderBase):
     order_status: bool
+    customer: str
+    order_date: datetime
+    total_price: float
+    order_id: int
+    order_detail: Optional[list[OrderDetail]]
 
 class OrderUpdate(BaseModel):
     customer: Optional[str] = None
     total_price: Optional[float] = None
     order_status: Optional[bool] = False
-    order_details: Optional[OrderDetail] = None
 
 
 
@@ -27,6 +31,3 @@ class Order(OrderBase):
     order_id: int
     order_date: Optional[datetime] = None
     order_details: list[OrderDetail] = None
-
-    class ConfigDict:
-        from_attributes = True

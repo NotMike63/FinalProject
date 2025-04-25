@@ -10,7 +10,7 @@ def create(db: Session, request):
         card_info=request.card_info,
         transaction_status=request.transaction_status,
         payment_type=request.payment_type,
-        tracking_number=request.tracking_number
+        order_id=request.order_id
     )
 
     try:

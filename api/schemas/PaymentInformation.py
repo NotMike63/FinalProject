@@ -10,7 +10,7 @@ class PaymentInformation(BaseModel):
     card_info: str
     transaction_status: bool
     payment_type: str
-    tracking_number: int
+    order_id: int
 
 class PaymentRequest(BaseModel):
     card_information: str

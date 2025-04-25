@@ -16,9 +16,9 @@ def create(request: schema.RatingsAndReviews, db: Session = Depends(get_db)):
     return controller.create(db=db, request=request)
 
 # Check the status of your Rating and Review.
-@router.get("/{tracking_number}", response_model=schema.RatingsAndReviews)
-def get_status(tracking_number: int, db: Session = Depends(get_db)):
-    return controller.read_one(db, tracking_number=tracking_number)
+@router.get("/{order_id}", response_model=schema.RatingsAndReviews)
+def get_status(order_id: int, db: Session = Depends(get_db)):
+    return controller.read_one(db, order_id=order_id)
 
 # Get all Ratings and Reviews.
 @router.get("/", response_model=list[schema.RatingsAndReviews])
@@ -26,12 +26,12 @@ def read_all(db: Session = Depends(get_db)):
     return controller.read_all(db)
 
 # Update a Rating and Review.
-@router.put("/{tracking_number}", response_model=schema.RatingsAndReviewsUpdate)
-def update(tracking_number: int, request: schema.RatingsAndReviews, db: Session = Depends(get_db)):
-    return controller.update(db=db, request=request, tracking_number=tracking_number)
+@router.put("/{order_id}", response_model=schema.RatingsAndReviewsUpdate)
+def update(order_id: int, request: schema.RatingsAndReviews, db: Session = Depends(get_db)):
+    return controller.update(db=db, request=request, order_id=order_id)
 
 # remove Rating and Review
-@router.delete("/{tracking_number}")
-def delete(tracking_number: int, db: Session = Depends(get_db)):
-    return controller.delete(db=db, tracking_number=tracking_number)
+@router.delete("/{order_id}")
+def delete(order_id: int, db: Session = Depends(get_db)):
+    return controller.delete(db=db, order_id=order_id)
 

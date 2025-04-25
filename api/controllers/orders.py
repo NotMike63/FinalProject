@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status, Response, Depends
 from ..models import orders as model
+from ..models import order_details as model_od
 from sqlalchemy.exc import SQLAlchemyError
-from ..controllers import order_details
-
 
 def create(db: Session, request):
     new_item = model.Order(
@@ -34,9 +33,9 @@ def read_all(db: Session):
     return result
 
 
-def read_one(db: Session, item_id):
+def read_one(db: Session, order_id):
     try:
-        item = db.query(model.Order).filter(model.Order.order_id == item_id).first()
+        item = db.query(model.Order).filter(model.Order.order_id == order_id).first()
         if not item:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
     except SQLAlchemyError as e:
@@ -62,10 +61,11 @@ def update(db: Session, order_id, request):
 def delete(db: Session, order_id):
     try:
         item = db.query(model.Order).filter(model.Order.order_id == order_id)
-        order_details.delete(db, item)
+        item_order_det = db.query(model_od.OrderDetail).filter(model_od.OrderDetail.order_id == order_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         item.delete(synchronize_session=False)
+        item_order_det.delete(synchronize_session=False)
         db.commit()
     except SQLAlchemyError as e:
         error = str(e.__dict__['orig'])

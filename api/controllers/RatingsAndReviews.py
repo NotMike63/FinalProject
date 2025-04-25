@@ -8,7 +8,7 @@ from ..models import RatingsAndReviews as model
 # This method controls the functionality of creating a new element in the RatingsAndReviews table.
 def create(db: Session, request):
     new_item = model.RatingsAndReviews(
-        tracking_number=request.tracking_number,
+        order_id=request.order_id,
         review_text=request.review_text,
         review_score=request.review_score
     )
@@ -34,9 +34,9 @@ def read_all(db: Session):
     return result
 
 
-def read_one(db: Session, tracking_number):
+def read_one(db: Session, order_id):
     try:
-        item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.tracking_number == tracking_number).first()
+        item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.order_id == order_id).first()
         if not item:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
     except SQLAlchemyError as e:
@@ -46,9 +46,9 @@ def read_one(db: Session, tracking_number):
 
 
 # This method controls the functionality of updating a single element in the RatingsAndReviews table.
-def update(db: Session, tracking_number, request):
+def update(db: Session, order_id, request):
     try:
-        item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.tracking_number == tracking_number)
+        item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.order_id == order_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         update_data = request.dict(exclude_unset=True)
@@ -61,9 +61,9 @@ def update(db: Session, tracking_number, request):
 
 
 # This controls the functionality of deleting an element from the RatingsAndReviews table.
-def delete(db: Session, tracking_number):
+def delete(db: Session, order_id):
     try:
-        item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.tracking_number == tracking_number)
+        item = db.query(model.RatingsAndReviews).filter(model.RatingsAndReviews.order_id == order_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         item.delete(synchronize_session=False)
