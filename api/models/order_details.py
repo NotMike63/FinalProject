@@ -9,4 +9,4 @@ class OrderDetail(Base):
     order_id = Column(Integer, ForeignKey("orders.order_id"), primary_key=True, index=True)
     amount = Column(Integer, nullable=False)
 
-    order = relationship("Order", back_populates="order_details", foreign_keys=[order_id])
+    order = relationship("Order", back_populates="order_details")

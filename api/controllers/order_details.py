@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status, Response, Depends
 from ..models import order_details as model
+from ..models import orders as model_orders
 from sqlalchemy.exc import SQLAlchemyError
 
 
@@ -9,7 +10,9 @@ def create(db: Session, request):
         order_id=request.order_id,
         amount=request.amount
     )
-
+    item = db.query(model_orders.Order).filter(model_orders.Order.order_id == new_item.order_id)
+    if item.first() is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     try:
         db.add(new_item)
         db.commit()
