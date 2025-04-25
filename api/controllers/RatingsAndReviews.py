@@ -76,9 +76,9 @@ def delete(db: Session, order_id):
 
 # Creates a review specifically for a food item
 def create_food_review(db: Session, request):
-    from ..models import FoodReviews as model  # Assuming new model
-    new_item = model.FoodReviews(
-        menu_item_id=request.menu_item_id,
+    from ..models import RatingsAndReviews as model
+    new_item = model.RatingsAndReviews(
+        order_id=request.order_id,
         review_text=request.review_text,
         review_score=request.review_score
     )
