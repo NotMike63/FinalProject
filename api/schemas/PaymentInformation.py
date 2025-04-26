@@ -17,7 +17,7 @@ class PaymentRequest(BaseModel):
 
 # Schema for updating PaymentInformation
 class PaymentInformationUpdate(BaseModel):
-    card_information: Optional[str] = None
+    card_info: Optional[str] = None
     transaction_status: Optional[bool] = None
     payment_type: Optional[str] = None
 
