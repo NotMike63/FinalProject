@@ -3,8 +3,8 @@ from fastapi import HTTPException, status, Response
 from ..models import resource_managements as model
 from sqlalchemy.exc import SQLAlchemyError
 
-from ..schemas import resource_managements
-from api.schemas import resource_managements
+#from ..schemas import resource_managements
+#from api.schemas import resource_managements
 
 
 def create(db: Session, request):
