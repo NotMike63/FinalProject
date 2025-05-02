@@ -27,7 +27,7 @@ def read_all(db: Session = Depends(get_db)):
 
 # Update a Rating and Review.
 @router.put("/{order_id}", response_model=schema.RatingsAndReviewsUpdate)
-def update(order_id: int, request: schema.RatingsAndReviews, db: Session = Depends(get_db)):
+def update(order_id: int, request: schema.RatingsAndReviewsUpdate, db: Session = Depends(get_db)):
     return controller.update(db=db, request=request, order_id=order_id)
 
 # remove Rating and Review

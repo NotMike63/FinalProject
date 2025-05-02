@@ -10,6 +10,6 @@ class RatingsAndReviews(BaseModel):
         orm_mode = True
 
 class RatingsAndReviewsUpdate(BaseModel):
-    new_review_text: str
-    new_review_score: float
+    review_text: str
+    review_score: float
 
