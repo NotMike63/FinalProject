@@ -78,7 +78,7 @@ def total_price_daily(db: Session):
         result = db.query(model.Order).all()
         result_sum = 0.0
         for item in result:
-            result_sum += item.total_price
+            result_sum += float(item.total_price)
     except SQLAlchemyError as e:
         error = str(e.__dict__['orig'])
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
