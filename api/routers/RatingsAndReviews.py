@@ -34,11 +34,3 @@ def update(order_id: int, request: schema.RatingsAndReviews, db: Session = Depen
 @router.delete("/{order_id}")
 def delete(order_id: int, db: Session = Depends(get_db)):
     return controller.delete(db=db, order_id=order_id)
-
-@router.post("/food-review")
-def create_food_review(request: RatingsAndReviews, db: Session = Depends(get_db)):
-    return controller.create_food_review(db, request)
-
-@router.get("/popular")
-def view_popular_items(db: Session = Depends(get_db)):
-    return controller.get_popular_items(db)

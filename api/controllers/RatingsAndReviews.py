@@ -1,16 +1,21 @@
 from fastapi import HTTPException, status, Response
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-
 from ..models import RatingsAndReviews as model
+from ..models.orders import Order
 
 
 # This method controls the functionality of creating a new element in the RatingsAndReviews table.
 def create(db: Session, request):
+    order = db.query(Order).filter(Order.order_id == request.order_id).first()
+    if not order:
+        raise HTTPException(status_code=400, detail=f"Order ID {request.order_id} does not exist.")
+
     new_item = model.RatingsAndReviews(
         order_id=request.order_id,
         review_text=request.review_text,
-        review_score=request.review_score
+        review_score=request.review_score,
+        customer_name=request.customer_name
     )
 
     try:
@@ -72,36 +77,3 @@ def delete(db: Session, order_id):
         error = str(e.__dict__['orig'])
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-# Creates a review specifically for a food item
-def create_food_review(db: Session, request):
-    from ..models import RatingsAndReviews as model
-    new_item = model.RatingsAndReviews(
-        order_id=request.order_id,
-        review_text=request.review_text,
-        review_score=request.review_score
-    )
-    try:
-        db.add(new_item)
-        db.commit()
-        db.refresh(new_item)
-    except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
-    return new_item
-
-# Gets most popular items based on order frequency
-def get_popular_items(db: Session):
-    try:
-        result = db.execute("""
-            SELECT menu_item_id, COUNT(*) AS review_count
-            FROM RatingsAndReviews
-            GROUP BY menu_item_id
-            ORDER BY review_count DESC
-            LIMIT 10
-        """).fetchall()
-    except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
-    return result
