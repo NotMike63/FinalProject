@@ -56,8 +56,8 @@ def update(db: Session, resource_management_id: int, request):
         items.items = request.items
 
         db.commit()
-        #db.refresh(items)
-        #return {"message": "Resource management record updated successfully"}
+        db.refresh(items)
+        return {"message": "Resource management record updated successfully"}
 
     except SQLAlchemyError as e:
         error = str(e.__dict__['orig'])

@@ -34,9 +34,9 @@ def read_all(db: Session):
     return result
 
 
-def read_one(db: Session, card_info):
+def read_one(db: Session, order_id: int):
     try:
-        item = db.query(model.PaymentInformation).filter(model.PaymentInformation.card_info == card_info).first()
+        item = db.query(model.PaymentInformation).filter(model.PaymentInformation.order_id == order_id).first()
         if not item:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
     except SQLAlchemyError:
@@ -44,9 +44,9 @@ def read_one(db: Session, card_info):
     return item
 
 # Update all elements in an item in the table.
-def update(db: Session, card_info, request):
+def update(db: Session, order_id: int, request):
     try:
-        item = db.query(model.PaymentInformation).filter(model.PaymentInformation.card_info == card_info)
+        item = db.query(model.PaymentInformation).filter(model.PaymentInformation.order_id == order_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         update_data = request.dict(exclude_unset=True)
@@ -58,9 +58,9 @@ def update(db: Session, card_info, request):
     return item.first()
 
 
-def delete(db: Session, card_info):
+def delete(db: Session, order_id: int):
     try:
-        item = db.query(model.PaymentInformation).filter(model.PaymentInformation.card_info == card_info)
+        item = db.query(model.PaymentInformation).filter(model.PaymentInformation.order_id == order_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
         item.delete(synchronize_session=False)
