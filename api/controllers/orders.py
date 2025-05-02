@@ -10,7 +10,6 @@ def create(db: Session, request):
         order_date=request.order_date,
         total_price=request.total_price,
         customer=request.customer,
-        order_id=request.order_id
     )
 
     try:
@@ -72,3 +71,16 @@ def delete(db: Session, order_id):
         error = str(e.__dict__['orig'])
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# Return the total $ amount of orders from the day
+def total_price_daily(db: Session):
+    try:
+        result = db.query(model.Order).all()
+        result_sum = 0.0
+        for item in result:
+            result_sum += item.total_price
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return result_sum
+

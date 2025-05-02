@@ -24,6 +24,11 @@ def read_one(order_id: int, db: Session = Depends(get_db)):
 def read_all(db: Session = Depends(get_db)):
     return controller.read_all(db)
 
+# Get the daily order total in $ from server.
+@router.get("/total_price_daily", response_model=float)
+def total_price_daily(db: Session = Depends(get_db)):
+    return controller.toztal_price_daily(db=db)
+
 # Edits an item in the server.
 @router.put("/{order_id}", response_model=schema.OrderUpdate)
 def update(order_id: int, request: schema.OrderUpdate, db: Session = Depends(get_db)):
