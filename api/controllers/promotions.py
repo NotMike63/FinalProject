@@ -7,7 +7,10 @@ def create(db: Session, request):
     new_promotion = model.Promotion(
         code=request.code,
         expiration_date=request.expiration_date,
-        is_active = request.is_active
+        is_active = request.is_active,
+        discount_type = request.discount_type,
+        discount_value = request.discount_value
+
     )
 
     db.add(new_promotion)

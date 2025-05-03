@@ -11,6 +11,8 @@ class OrderBase(BaseModel):
     total_price: float
     order_id: int
     customer: str
+    promotion_code: Optional[str] = None
+
 
 class OrderCreate(OrderBase):
     order_status: bool
@@ -19,6 +21,8 @@ class OrderCreate(OrderBase):
     total_price: float
     order_id: int
     order_detail: Optional[list[OrderDetail]]
+    promotion_code: Optional[str] = None
+
 
 class OrderUpdate(BaseModel):
     customer: Optional[str] = None

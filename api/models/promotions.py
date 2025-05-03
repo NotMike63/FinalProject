@@ -10,3 +10,5 @@ class Promotion(Base):
     code = Column(String(100), unique=True, nullable=True)
     expiration_date = Column(String(100), nullable=True)
     is_active = Column(BOOLEAN, default=True)
+    discount_type = Column(String(20), nullable=False) # discount 'fixed' or 'percentage'
+    discount_value = Column(DECIMAL(10,2), nullable=False) # discount is a fixed amount or a percentage off
