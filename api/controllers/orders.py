@@ -14,17 +14,21 @@ def create(db: Session, request):
         ).first()
         if not promo:
             raise HTTPException(status_code=404, detail="Promotion code not found or inactive")
+        new_item = model.Order(
+            order_status=request.order_status,
+            order_date=request.order_date,
+            total_price=request.total_price,
+            customer=request.customer,
+            promotion_code=request.promotion_code
+        )
     else:
         request.promotion_code = None
-
-    new_item = model.Order(
-        order_status=request.order_status,
-        order_date=request.order_date,
-        total_price=request.total_price,
-        customer=request.customer,
-        promotion_code=request.promotion_code
-
-    )
+        new_item = model.Order(
+            order_status=request.order_status,
+            order_date=request.order_date,
+            total_price=request.total_price,
+            customer=request.customer
+        )
 
     try:
         db.add(new_item)
