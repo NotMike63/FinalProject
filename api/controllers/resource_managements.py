@@ -70,7 +70,7 @@ def delete(db: Session, resource_management_id):
             model.ResourceManagement.resource_management_id == resource_management_id
         )
         if not items.first():
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Insufficient amount/id")
         items.delete(synchronize_session=False)
         db.commit()
     except SQLAlchemyError as e:
