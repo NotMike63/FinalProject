@@ -1,10 +1,7 @@
 from __future__ import annotations
-
 import sqlalchemy
 from fastapi import HTTPException, status, Response, Depends
-from http.client import HTTPException
 from typing import Type
-
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from ..models.customer import Customer
@@ -29,12 +26,15 @@ def get_all_customers(db: Session) -> list[Type[Customer]]:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
-def get_customer(db: Session, customer_id: int) -> Customer | None:
+def get_customer(db: Session, customer_id: int):
     try:
-        return db.query(Customer).filter(Customer.id == customer_id).first()
-    except Exception as e:
+        customer = db.query(Customer).filter(Customer.id == customer_id).first()
+        if not customer:
+            raise HTTPException(status_code=404, detail="Customer not found")
+    except SQLAlchemyError:
         db.rollback()
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str("Failed to find customer with given id"))
+    return customer
 
 def delete_customer(db: Session, customer_id: int):
     try:

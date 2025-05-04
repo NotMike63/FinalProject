@@ -1,7 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from .dependencies.config import conf
 from .models import model_loader
 from .routers import index as indexRoute

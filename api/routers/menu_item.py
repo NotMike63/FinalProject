@@ -6,7 +6,7 @@ from ..dependencies.database import get_db
 
 router = APIRouter(
     tags=["Menu Items"],
-    prefix="/menu-items"
+    prefix="/menu"
 )
 
 @router.post("/", response_model=schema.MenuItemOut, status_code=status.HTTP_200_OK)
