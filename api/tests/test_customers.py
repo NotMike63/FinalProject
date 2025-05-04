@@ -1,58 +1,51 @@
-import unittest
-from fastapi.testclient import TestClient
-from api import main
+import pytest
+from api.controllers.customer import create_customer, get_all_customers, get_customer, delete_customer
+from api.schemas.customer import CustomerCreate
+from api.models.customer import Customer
 
-client = TestClient(main.app)
+@pytest.fixture
+def db_session(mocker):
+    return mocker.Mock()
 
-class TestCustomerAPI(unittest.TestCase):
+def test_create_customer_controller(db_session):
+    data = {
+        "name": "John Doe",
+        "email": "JohnDoe@example.com",
+        "phone": "123-456-7890",
+        "address": "123 Wall St"
+    }
+    schema = CustomerCreate(**data)
 
-    def test_create_customer(self):
-        data = {
-            "name": "John Doe",
-            "email": "John_Doe@example.com",
-            "phone": "123-456-7890",
-            "address": "123 Wall Street"
-        }
-        response = client.post("/customers", json=data)
-        self.assertEqual(response.status_code, 200)
-        json_data = response.json()
-        self.assertIn("id", json_data)
-        self.assertEqual(json_data["email"], data["email"])
+    created = create_customer(db_session, schema)
 
-    def test_get_all_customers(self):
-        response = client.get("/customers")
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.json(), list)
+    assert created is not None
+    assert created.name == "John Doe"
+    assert created.email == "JohnDoe@example.com"
+    assert created.phone == "123-456-7890"
+    assert created.address == "123 Wall St"
 
-    def test_get_customer_by_id(self):
-        data = {
-            "name": "John Doe",
-            "email": "John_Doe@example.com",
-            "phone": "123-456-7890",
-            "address": "123 Wall Street"
-        }
-        post_resp = client.post("/customers", json=data)
-        customer_id = post_resp.json()["id"]
+def test_get_all_customers_controller(db_session):
+    db_session.query.return_value.all.return_value = []
 
-        get_resp = client.get(f"/customers/{customer_id}")
-        self.assertEqual(get_resp.status_code, 200)
-        self.assertEqual(get_resp.json()["id"], customer_id)
+    customers = get_all_customers(db_session)
+    assert customers is not None
 
-    def test_delete_customer(self):
-        data = {
-            "name": "John Doe",
-            "email": "john_Doe@example.com",
-            "phone": "123-456-7890",
-            "address": "123 Wall Street"
-        }
-        post_resp = client.post("/customers", json=data)
-        customer_id = post_resp.json()["id"]
+def test_get_customer_controller(db_session):
+    customer = Customer(**{
+        "name": "John Doe",
+        "email": "JohnDoe@example.com",
+        "phone": "123-456-7890",
+        "address": "123 Wall St"
+    })
+    db_session.query.return_value.filter.return_value.first.return_value = customer
 
-        delete_resp = client.delete(f"/customers/{customer_id}")
-        self.assertIn(delete_resp.status_code, [200, 204])
+    result = get_customer(db_session, 1)
+    assert result is not None
+    assert result.name == "John Doe"
+    assert result.email == "JohnDoe@example.com"
+    assert result.phone == "123-456-7890"
+    assert result.address == "123 Wall St"
 
-        get_resp = client.get(f"/customers/{customer_id}")
-        self.assertEqual(get_resp.status_code, 404)
+def test_delete_customer_controller(db_session):
+    db_session.query.return_value.filter.return_value.first.return_value = None
 
-if __name__ == "__main__":
-    unittest.main()

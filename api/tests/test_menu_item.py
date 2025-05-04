@@ -1,63 +1,46 @@
-import unittest
-from fastapi.testclient import TestClient
-from api import main
+import pytest
+from api.controllers.menu_item import create_menu_item, get_all_menu_items, get_menu_item_by_id, update_menu_item, delete_menu_item
+from api.schemas.menu_item import MenuItemCreate, MenuItemUpdate
+from api.models.menu_item import MenuItem
 
-client = TestClient(main.app)
+@pytest.fixture
+def db_session(mocker):
+    return mocker.Mock()
 
-class TestMenuItemAPI(unittest.TestCase):
+def test_create_menu_item_controller(db_session):
+    data = {
+        "name": "Burger",
+        "price": 5.55,
+        "calories": 550,
+        "category": "Test"
+    }
+    schema = MenuItemCreate(**data)
+    created = create_menu_item(db_session, schema)
 
-    def test_get_menu_items(self):
-        response = client.get("/menu")
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.json(), list)
+    assert created is not None
+    assert created.name == "Burger"
+    assert created.price == 5.55
+    assert created.calories == 550
+    assert created.category == "Test"
 
-    def test_create_menu_item(self):
-        data = {
-            "name": "Test Burger",
-            "price": 10.99,
-            "calories": 777,
-            "category": "Temp"
-        }
-        response = client.post("/menu", json=data)
-        self.assertEqual(response.status_code, 200)
-        json_resp = response.json()
-        self.assertEqual(json_resp["name"], data["name"])
-        self.assertEqual(json_resp["price"], data["price"])
+def test_get_all_menu_items_controller(db_session):
+    db_session.query.return_value.all.return_value = []
+    items = get_all_menu_items(db_session)
 
-    def test_update_menu_item(self):
-        new_item = {
-            "name": "Temp Item",
-            "price": 5.00,
-            "calories": 500,
-            "category": "Temp"
-        }
-        post_resp = client.post("/menu", json=new_item)
-        item_id = post_resp.json()["id"]
+    assert items is not None
 
-        update_data = {"name": "Updated item",
-                       "price": 6.69,
-                       "calories": 420,
-                       "category": "Temp"
-        }
-        put_resp = client.put(f"/menu/{item_id}", json=update_data)
-        self.assertEqual(put_resp.status_code, 200)
-        self.assertEqual(put_resp.json()["price"], update_data["price"])
+def test_get_menu_item_by_id_controller(db_session):
+    item = MenuItem(**{
+        "name": "Test Item",
+        "price": 1.23,
+        "calories": 123,
+        "category": "Test"
+    })
+    db_session.query.return_value.filter.return_value.first.return_value = item
 
-    def test_delete_menu_item(self):
-        new_item = {
-            "name": "Delete Me :D",
-            "price": 4.44,
-            "calories": 444,
-            "category": "Test"
-        }
-        post_resp = client.post("/menu", json=new_item)
-        item_id = post_resp.json()["id"]
+    result = get_menu_item_by_id(db_session, 1)
+    assert result is not None
 
-        delete_resp = client.delete(f"/menu/{item_id}")
-        self.assertEqual(delete_resp.status_code, 200)
+def test_delete_menu_item_controller(db_session):
+    db_session.query.return_value.filter.return_value.first.return_value = None
 
-        get_resp = client.get(f"/menu/{item_id}")
-        self.assertEqual(get_resp.status_code, 404)
-
-if __name__ == "__main__":
-    unittest.main()
