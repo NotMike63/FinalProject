@@ -7,7 +7,7 @@ from api.models.customer import Customer
 def db_session(mocker):
     return mocker.Mock()
 
-def test_create_customer_controller(db_session):
+def test_create_customer(db_session):
     data = {
         "name": "John Doe",
         "email": "JohnDoe@example.com",
@@ -24,13 +24,12 @@ def test_create_customer_controller(db_session):
     assert created.phone == "123-456-7890"
     assert created.address == "123 Wall St"
 
-def test_get_all_customers_controller(db_session):
-    db_session.query.return_value.all.return_value = []
-
+def test_get_all_customers(db_session):
     customers = get_all_customers(db_session)
+
     assert customers is not None
 
-def test_get_customer_controller(db_session):
+def test_get_customer(db_session):
     customer = Customer(**{
         "name": "John Doe",
         "email": "JohnDoe@example.com",
@@ -46,6 +45,6 @@ def test_get_customer_controller(db_session):
     assert result.phone == "123-456-7890"
     assert result.address == "123 Wall St"
 
-def test_delete_customer_controller(db_session):
+def test_delete_customer(db_session):
     db_session.query.return_value.filter.return_value.first.return_value = None
 

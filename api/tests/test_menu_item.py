@@ -24,7 +24,6 @@ def test_create_menu_item(db_session):
     assert created.category == "Test"
 
 def test_get_all_menu_items(db_session):
-    db_session.query.return_value.all.return_value = []
     items = get_all_menu_items(db_session)
 
     assert items is not None

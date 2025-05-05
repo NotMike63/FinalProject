@@ -23,12 +23,11 @@ def test_create_payment_info(db_session):
     assert created.order_id == 1
 
 def test_read_all_payment_info(db_session):
-    db_session.query.return_value.all.return_value = []
     result = read_all(db_session)
 
     assert result is not None
 
-def test_read_one_payment_info_controller(db_session):
+def test_read_one_payment_info(db_session):
     sample = PaymentModel(
         card_info="1234-5678-9012-3456",
         transaction_status=True,
@@ -43,7 +42,7 @@ def test_read_one_payment_info_controller(db_session):
     assert result.payment_type == "Credit"
     assert result.order_id == 42
 
-def test_update_payment_info_controller(db_session):
+def test_update_payment_info(db_session):
     mock_query = db_session.query.return_value.filter.return_value
     mock_query.first.return_value = PaymentModel(
         card_info="1234-5678-9012-3456",
@@ -63,7 +62,7 @@ def test_update_payment_info_controller(db_session):
     assert updated.transaction_status == False
     assert updated.card_info == "1234-5678-9012-3456"
 
-def test_delete_payment_info_controller(db_session):
+def test_delete_payment_info(db_session):
     mock_query = db_session.query.return_value.filter.return_value
     mock_query.first.return_value = PaymentModel(
         card_info="1234-5678-9012-3456",
