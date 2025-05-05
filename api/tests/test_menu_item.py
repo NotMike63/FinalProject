@@ -7,7 +7,7 @@ from api.models.menu_item import MenuItem
 def db_session(mocker):
     return mocker.Mock()
 
-def test_create_menu_item_controller(db_session):
+def test_create_menu_item(db_session):
     data = {
         "name": "Burger",
         "price": 5.55,
@@ -23,24 +23,28 @@ def test_create_menu_item_controller(db_session):
     assert created.calories == 550
     assert created.category == "Test"
 
-def test_get_all_menu_items_controller(db_session):
+def test_get_all_menu_items(db_session):
     db_session.query.return_value.all.return_value = []
     items = get_all_menu_items(db_session)
 
     assert items is not None
 
-def test_get_menu_item_by_id_controller(db_session):
+def test_get_menu_item_by_id(db_session):
     item = MenuItem(**{
         "name": "Test Item",
         "price": 1.23,
         "calories": 123,
         "category": "Test"
     })
-    db_session.query.return_value.filter.return_value.first.return_value = item
+    db_session.query.return_value.get.return_value = item
 
     result = get_menu_item_by_id(db_session, 1)
     assert result is not None
+    assert result.name == "Test Item"
+    assert result.price == 1.23
+    assert result.calories == 123
+    assert result.category == "Test"
 
-def test_delete_menu_item_controller(db_session):
+def test_delete_menu_item(db_session):
     db_session.query.return_value.filter.return_value.first.return_value = None
 
